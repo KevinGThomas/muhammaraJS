@@ -238,6 +238,13 @@ exports._makeTextBox = function _makeTextBox(options) {
  * @param {string|number[]} [options.textBox.style.fill] - Text Box border background color (HexColor, PercentColor or DecimalColor)
  * @param {number} [options.textBox.style.opacity=1] - Text Box border background opacity
  * @param {boolean|number|number[]} [options.textBox.style.borderRadius=0] - Border radius to apply to get rounded corners.
+ * @param {string} [options.title] - Title of annotation
+ * @param {boolean} [options.open=false] - Open the annotation. Annotation will be closed by default. Specific to text annotations; subtype='Text'
+ * @param {boolean} [options.richText] - Rich text in annotation
+ * @param {AnnotOptionsFlag} [options.flag] - The flag property of annotation
+ * @param {AnnotOptionsIcon} [options.icon='Note'] - The icon of annotation. Specific to text annotations. Default value: 'Note'
+ * @param {string} [options.date] - Date of text to show up on annotation
+ * @param {string} [options.subject] - Subject of annotation
  * When true is given, the default radius size for all corners is 5. A four number array may be used to give specific sizees to each
  * corner. The numbering starts from the top, left corner, and goes clockwise around the text box.
  */
@@ -359,15 +366,23 @@ exports.text = function text(text = "", x, y, options = {}) {
       const addUnderline = (x, y, ctx, options) => {
         // underline implementation
         if (options.underline) {
-          // console.log(textWidth, lineWidth, currentLineWidth)
           const underlineY = y - options.textHeight * 0.1;
-          //  TODO: fix the line with calculation
-          const width =
-            currentLineWidth -
-            (isHTML || toWriteTextObject.text.endsWith(" ") ? spaceWidth : 0);
+          const width = options.lineWidth;
           ctx
             .q()
             .drawPath(x, underlineY, x + width, underlineY, options)
+            .Q();
+        }
+      };
+
+      const addStrikeOut = (x, y, ctx, options) => {
+        // strikethrough implementation
+        if (options.strikeOut) {
+          const strikeOutY = y + options.textHeight * 0.2;
+          const width = options.lineWidth;
+          ctx
+            .q()
+            .drawPath(x, strikeOutY, x + width, strikeOutY, options)
             .Q();
         }
       };
@@ -394,6 +409,7 @@ exports.text = function text(text = "", x, y, options = {}) {
         ctx.ET();
 
         addUnderline(x, y, ctx, options);
+        addStrikeOut(x, y, ctx, options);
       };
 
       const justifyText = (left, x, wto, textBox, ctx, options, callback) => {
@@ -416,12 +432,16 @@ exports.text = function text(text = "", x, y, options = {}) {
 
       const writeText = (context, x, y, wto) => {
         const options = wto.writeOptions;
-        const { lineHeight, text, baseline } = wto;
+        const { lineWidth, lineHeight, text, baseline } = wto;
         let next_x = 0;
 
         if (text === "") {
           // nothing to write, so simply escape.
           return next_x;
+        }
+
+        if (options.underline || options.strikeOut) {
+          options.lineWidth = lineWidth;
         }
 
         // Produce a hilite under words?
@@ -549,13 +569,24 @@ exports.text = function text(text = "", x, y, options = {}) {
               typeof targetAnnotations[key] != "object"
                 ? {}
                 : targetAnnotations[key];
+            const { title, open, richText, flag, icon, date, subject } =
+              targetAnnotations;
             Object.assign(markupOption, {
               height: textHeight * 1.4,
               width: currentLineWidth,
               text: markupOption.text || "",
               _textHeight: textHeight,
+              // add options to annotation
+              title: title || "",
+              open: Boolean(open),
+              richText: Boolean(richText),
+              flag: flag || "",
+              icon: icon || "",
+              date: date || "",
+              subject: subject || "",
             });
             const { ox, oy } = this._reverseCoordinate(x, y - textHeight * 0.2);
+
             this.annot(ox, oy, subtype, markupOption);
           }
         }
@@ -798,6 +829,9 @@ exports._layoutText = function _layoutText(textObjects, textBox, pathOptions) {
         child.underline = textObject.underline
           ? textObject.underline
           : child.underline;
+        child.strikeOut = textObject.strikeOut
+          ? textObject.strikeOut
+          : child.strikeOut;
 
         child.lineID = textObject.lineID;
         writeValue(child);
@@ -1075,6 +1109,7 @@ function makeTextObjects(self, textObject = {}, pathOptions, textBox = {}) {
     color: textObject.styles.color,
     opacity: parseFloat(textObject.styles.opacity || pathOptions.opacity || 1),
     underline: textObject.underline || pathOptions.underline,
+    strikeOut: textObject.strikeOut || pathOptions.strikeOut,
     size: textObject.size,
     alignHorizontal: alignHorizontal,
     alignVertical: alignVertical,

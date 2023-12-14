@@ -7,6 +7,60 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.1.0] - 2023-12-13
+
+### Fixed
+
+- definitions: appendPage optionnal parameter
+- Build musl/musl-arm with node 20
+- Support negative rotation in recipe page changes
+- registerFont now returns recipe as stated in typescript definition
+
+### Added
+
+- Add nodejs v21.0.0
+
+## [4.0.0] - 2023-07-14
+
+### Fixed
+
+- Underline in text object
+- Recipe type / arg documentation
+- Add missing type `userPassword` to `EncryptOptions`
+
+### Added
+
+- Strikethrough implementation in text object
+- Add electron 23.2., 23.3
+- Recipe infos to readme
+- Electron v24.1, 24.2, 24.3, 24.4, 24.5, 24.6
+- Add node 20.x
+- Add electron v25.0, 25.1, 25.2, 25.3
+- Option to add annotation replies to annotations
+- Textboxes now show title and date as annotations in pdfs
+
+### Removed
+
+- Dependency to static-eval and static-module as they are not used directly
+- Node versions: 11.x - 14.x
+- Electron versions: 11.x - 14.2
+
+### Changed
+
+- Updated node-gyp version to 1.0.10
+- Older node ubuntu 18.04 builds are now building on docker, as github actions removed 18.04
+- CI linux builds use ubuntu 20.04 instead of 18.04 -> glibc Update, see readme for breaking changes in v4
+
+## [3.8.0] - 2023-03-01
+
+### Added
+
+- Electron 22.3, 23.0.0, 23.1.1
+
+### Fixed
+
+- Correctly includes types file in package
+
 ## [3.7.0] - 2023-02-09
 
 ### Added
@@ -358,7 +412,10 @@ with the following changes.
 
 - Initial release
 
-[unreleased]: https://github.com/julianhille/MuhammaraJS/compare/3.7.0...HEAD
+[unreleased]: https://github.com/julianhille/MuhammaraJS/compare/4.1.0...HEAD
+[4.1.0]: https://github.com/julianhille/MuhammaraJS/compare/4.0.0...4.1.0
+[4.0.0]: https://github.com/julianhille/MuhammaraJS/compare/3.8.0...4.0.0
+[3.8.0]: https://github.com/julianhille/MuhammaraJS/compare/3.7.0...3.8.0
 [3.7.0]: https://github.com/julianhille/MuhammaraJS/compare/3.6.0...3.7.0
 [3.6.0]: https://github.com/julianhille/MuhammaraJS/compare/3.5.0...3.6.0
 [3.5.0]: https://github.com/julianhille/MuhammaraJS/compare/3.4.0...3.5.0
