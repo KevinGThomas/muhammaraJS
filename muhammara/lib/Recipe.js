@@ -28,7 +28,9 @@ class Recipe {
     this.src = src;
     // detect the src is Buffer or not
     this.isBufferSrc = this.src instanceof Buffer;
-    this.isNewPDF = !this.isBufferSrc && src.toLowerCase() === "new";
+    this.isNewPDF =
+      (!this.isBufferSrc && src.toLowerCase() === "new") ||
+      (this.isBufferSrc && this.src.equals(Buffer.from("new")));
     this.encryptOptions = this._getEncryptOptions(options, this.isNewPDF);
     this.options = Object.assign({}, options, this.encryptOptions);
     this.current = {};
@@ -75,12 +77,21 @@ class Recipe {
 
   _createWriter() {
     if (this.isNewPDF) {
-      this.writer = muhammara.createWriter(
-        this.output,
-        Object.assign({}, this.encryptOptions, {
-          version: this._getVersion(this.options.version),
-        })
-      );
+      if (!this.isBufferSrc) {
+        this.writer = muhammara.createWriter(
+          this.output,
+          Object.assign({}, this.encryptOptions, {
+            version: this._getVersion(this.options.version),
+          }),
+        );
+      } else {
+        this.writer = muhammara.createWriter(
+          new muhammara.PDFStreamForResponse(this.outStream),
+          Object.assign({}, this.encryptOptions, {
+            log: this.logFile,
+          }),
+        );
+      }
     } else {
       this.read();
       try {
@@ -90,7 +101,7 @@ class Recipe {
             new muhammara.PDFStreamForResponse(this.outStream),
             Object.assign({}, this.encryptOptions, {
               log: this.logFile,
-            })
+            }),
           );
         } else {
           this.writer = muhammara.createWriterToModify(
@@ -98,7 +109,7 @@ class Recipe {
             Object.assign({}, this.encryptOptions, {
               modifiedFilePath: this.output,
               log: this.logFile,
-            })
+            }),
           );
         }
       } catch (err) {
@@ -122,7 +133,7 @@ class Recipe {
   get position() {
     const { ox, oy } = this._reverseCoordinate(
       this._position.x,
-      this._position.y
+      this._position.y,
     );
     return {
       x: ox,
@@ -222,7 +233,7 @@ class Recipe {
           new muhammara.PDFStreamForResponse(this.outStream),
           Object.assign({}, this.encryptOptions, {
             log: this.logFile,
-          })
+          }),
         );
       } else {
         this.writer = muhammara.createWriterToModify(
@@ -230,7 +241,7 @@ class Recipe {
           Object.assign({}, this.encryptOptions, {
             modifiedFilePath: this.output,
             log: this.logFile,
-          })
+          }),
         );
       }
 
@@ -242,7 +253,7 @@ class Recipe {
       if (this.isBufferSrc) {
         // eslint-disable-next-line no-console
         console.log(
-          "Feature: Inserting Pages is not supported in Buffer Mode yet."
+          "Feature: Inserting Pages is not supported in Buffer Mode yet.",
         );
       } else {
         this._insertPages();

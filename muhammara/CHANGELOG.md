@@ -7,6 +7,78 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.3.0] - 2024-12-14
+
+### Added
+
+- Add electron 31.7.0, 33.1.0, 33.2.0, 33.3.0 [#439](https://github.com/julianhille/MuhammaraJS/issues/439)
+
+### Fixed
+
+- Fix recipe with new buffers [#372](https://github.com/julianhille/MuhammaraJS/issues/372)
+- Wrong node versions for 2.2, 32.1 and 31.6 [#439](https://github.com/julianhille/MuhammaraJS/issues/439)
+- Fix recipes createPage typescript definition and jsdoc, discourage
+  use of '-size' values for pageType [#369](https://github.com/julianhille/MuhammaraJS/issues/369)
+
+## [5.2.0] - 2024-10-20
+
+### Added
+
+- Add electron 33.0, 32.1, 32.2, 31.5, 31.6, 30.5
+
+## [5.1.0] - 2024-10-17
+
+### Added
+
+- Add node v23.0.0
+
+### Updated
+
+- Downgrade to gcc11 to lower needed glibc version
+
+## [5.0.2] - 2024-10-10
+
+### Added
+
+- Update PDRWriter to 4.6.7 (#410)
+
+### Update
+
+- Build linux on docker -> downgrade glibc for linux builds (#423)
+
+## [5.0.1] - 2024-09-28
+
+### Added
+
+- Tests for bold, italic, underline, strikethrough, and highlights in textboxes
+- Add missing node v21 and v22 to the build matrix (#417)
+
+## [5.0.0] - 2024-09-08
+
+### Added
+
+- Add electron 24.7 and 24.8
+- Add electron 25.4, 25.5, 25.6, 25.7, 25.8 and 25.9
+- Add electron 26.0, 26.1, 26.2, 26.3, 26.4, 26.5, 26.6
+- Add electron 27.0, 27.1, 27.2 and 27.3
+- Add electron 28.0, 28.1, 28.2 and 28.3
+- Add electron 29.0, 29.1, 29.2, 29.3 and 29.4
+- Add electron 30.0, 30.1, 30.2, 30.3 and 30.4
+- Add electron 31.0, 31.1, 31.2, 31.3 and 31.4
+- Add electron 32.0
+- Add node v22.0.0
+
+### Remove
+
+- Outdated electron 23.x versions
+- Node version <= 16
+
+### Update
+
+- Update dependencies
+  - Including tar which removes a security vulnerability
+- new Buffer to Buffer.from
+
 ## [4.1.0] - 2023-12-13
 
 ### Fixed
@@ -24,15 +96,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Underline in text object
 - Recipe type / arg documentation
 - Add missing type `userPassword` to `EncryptOptions`
+- Underline in text object
 
 ### Added
 
-- Strikethrough implementation in text object
 - Add electron 23.2., 23.3
 - Recipe infos to readme
+- Strikethrough implementation in text object
 - Electron v24.1, 24.2, 24.3, 24.4, 24.5, 24.6
 - Add node 20.x
 - Add electron v25.0, 25.1, 25.2, 25.3
@@ -412,7 +484,13 @@ with the following changes.
 
 - Initial release
 
-[unreleased]: https://github.com/julianhille/MuhammaraJS/compare/4.1.0...HEAD
+:[unreleased]: https://github.com/julianhille/MuhammaraJS/compare/5.3.0...HEAD
+[5.3.0]: https://github.com/julianhille/MuhammaraJS/compare/5.2.0...5.3.0
+[5.2.0]: https://github.com/julianhille/MuhammaraJS/compare/5.1.0...5.2.0
+[5.1.0]: https://github.com/julianhille/MuhammaraJS/compare/5.0.2...5.1.0
+[5.0.2]: https://github.com/julianhille/MuhammaraJS/compare/5.0.1...5.0.2
+[5.0.1]: https://github.com/julianhille/MuhammaraJS/compare/5.0.0...5.0.1
+[5.0.0]: https://github.com/julianhille/MuhammaraJS/compare/4.1.0...5.0.0
 [4.1.0]: https://github.com/julianhille/MuhammaraJS/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/julianhille/MuhammaraJS/compare/3.8.0...4.0.0
 [3.8.0]: https://github.com/julianhille/MuhammaraJS/compare/3.7.0...3.8.0

@@ -2,13 +2,14 @@ const muhammara = require("../muhammara");
 
 /**
  * Create a new page, specifying either actual width and height, or the name
- * of a supported page size (eg. 'letter', )
+ * of a supported page size (eg. 'letter', 'letter-size')
+ * '-size' will be removed from string but is discouraged to use.
  * @name createPage
  * @function
  * @memberof Recipe
- * @param {number|string} [pageWidth_or_pageSizeName='letter'] - The page width, or name of medium size.
+ * @param {number|string} [pageWidth] - The page width, or name of medium size.
  * Known named medium sizes: executive, folio, legal, letter, ledger, tabloid, a0-a10, b0-b10, c0-c10, ra0-ra4, sra0-ara4
- * @param {number} [pageHeight_or_rotation] - The page height, or rotation (90) when when page size name given.
+ * @param {number} [pageHeight] - The page height, or rotation (90) when page size name given.
  * @param {object} [margins] - page margin definitions.
  * @param {number} [margins.left] - Left margin.
  * @param {number} [margins.right] - Right margin.
@@ -111,7 +112,7 @@ exports.editPage = function editPage(pageNumber) {
   const pageModifier = new muhammara.PDFPageModifier(
     pdfWriter,
     pageIndex,
-    true
+    true,
   );
   this.page = pageModifier;
   this.pageNumber = pageNumber;
@@ -135,31 +136,31 @@ exports.editPage = function editPage(pageNumber) {
       `[${startX}, ${startY}] is HERE`,
       startX,
       startY,
-      textOptions
+      textOptions,
     );
     context.writeText(
       `[${startX}, width/2] is HERE`,
       startX,
       width / 2,
-      textOptions
+      textOptions,
     );
     context.writeText(
       `[${startX}, height/2] is HERE`,
       startX,
       height / 2,
-      textOptions
+      textOptions,
     );
     context.writeText(
       `[width/2, ${startY}] is HERE`,
       width / 2,
       startY,
-      textOptions
+      textOptions,
     );
     context.writeText(
       `[height/2, ${startY}] is HERE`,
       height / 2,
       startY,
-      textOptions
+      textOptions,
     );
   }
   return this;
@@ -167,7 +168,7 @@ exports.editPage = function editPage(pageNumber) {
 
 exports._resumePageRotation = function _resumePageRotation(
   pageNumber,
-  context
+  context,
 ) {
   pageNumber = pageNumber || this.pageNumber;
   const {
